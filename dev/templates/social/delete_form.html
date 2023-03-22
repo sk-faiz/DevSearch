@@ -1,0 +1,15 @@
+{% extends 'main.html' %} 
+{% block projects %}
+<main class="formPage my-xl">
+  <div class="content-box">
+    <div class="formWrapper">
+      <form method="post">
+        {% csrf_token %}
+        <h2>Are you sure you want to delete {{label}}?</h2>
+        <input type="submit" value="Yes" class="btn btn--sub btn--lg my-md"/>
+        <a href="{{request.GET.next}}\"><input type="button" value="No" class="btn btn--lg my-md"/></a>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock projects %}

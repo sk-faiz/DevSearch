@@ -29,12 +29,31 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+    class Meta:
+        ordering = ['-vote_ratio', '-vote_count', '-created_at']
+
+    @property
+    def reviewers(self):
+        query_set = self.review_set.all().values_list('owner__id', flat=True)
+        return query_set
+    
+    @property
+    def getVoteCount(self):
+        review = self.review_set.all()
+        upvotes = review.filter(value='up').count()
+        total = review.count()
+        ratio = (upvotes / total) * 100
+        self.vote_count = total
+        self.vote_ratio = ratio
+        self.save()
 
 class Review(models.Model):
     VOTE_TYPE = (
         ('up', 'Up Vote'),
         ('down', 'Down Vote'),
     )
+    owner = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
     id = models.AutoField(primary_key=True)
     project = models.ForeignKey(Post, on_delete=models.CASCADE)
     body = models.TextField(null=True, blank=True)
@@ -42,7 +61,10 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = [['owner', 'project']]
+
     def __str__(self):
-        return self.value
+        return self.value + ' - ' + self.project.title
 
 

@@ -1,18 +1,31 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Post, Review, Tag
-from .forms import PostForm
+from .models import *
+from .forms import PostForm, ReviewForm
 from django.contrib.auth.decorators import login_required
+from .utils import *
+from django.contrib import messages
 
 def project(request):
-    projects = Post.objects.all()
+    projects = searchProjects(request)
     context = {'projects': projects}
     return render(request, 'social/projects.html', context)
 
 def projectDetail(request, id):
     projects = Post.objects.get(id=id)
     tags = projects.tags.all()
-    context = {'project': projects, 'tags': tags}
+    reviewform = ReviewForm()
+    if request.method == 'POST':
+        reviewform = ReviewForm(request.POST)
+        if reviewform.is_valid():
+            review = reviewform.save(commit=False)
+            review.owner = request.user.profile
+            review.project = projects
+            review.save()
+            projects.getVoteCount
+            messages.success(request, 'Your review was successfully submitted')
+            return redirect('projectDetail', id=projects.id)
+    context = {'project': projects, 'tags': tags, 'reviewform': reviewform}
     return render(request, 'social/single-project.html', context)
 
 @login_required(login_url='login')
@@ -51,3 +64,17 @@ def deletePost(request, postId):
         return redirect('account')
     context = {'form': project, 'label': project.title}
     return render(request, 'social/delete_form.html', context)
+
+
+def createReview(request, postId):
+    profile = request.user.profile
+    project = Post.objects.get(id=postId)
+    form = ReviewForm(request.POST)
+    if form.is_valid():
+        review = form.save(commit=False)
+        review.owner = profile
+        review.post = project
+        review.save()
+        return redirect('project-detail', id=project.id)
+    context = {'form': form}
+    return render(request, 'social/single-project.html', context)

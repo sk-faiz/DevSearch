@@ -6,6 +6,7 @@ from django.contrib import messages
 from .forms import CreateUserForm
 from django.contrib.auth.decorators import login_required
 from .forms import *
+from .utils import *
 
 def loginUser(request):
     page = 'login'
@@ -18,7 +19,7 @@ def loginUser(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('profile')
+            return redirect(request.GET['next'] if 'next' in request.GET else 'profile')
         else:
             messages.error(request, 'Username or Password is incorrect')
     return render(request, 'user/login_registration.html')
@@ -46,7 +47,7 @@ def registerUser(request):
     return render(request, 'user/login_registration.html',context)
 
 def profile(request):
-    profiles = Profile.objects.all()
+    profiles = searchProfiles(request)
     context = {'profiles': profiles}
     return render(request, 'user/profiles.html', context)
 

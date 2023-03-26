@@ -9,14 +9,15 @@
       </div>
 
       <div class="hero-section__search">
-        <form class="form" action="#" method="get">
+        <form class="form" action="{% url 'projects' %}" method="get">
           <div class="form__field">
             <label for="formInput#search">Search By Projects </label>
             <input
               class="input input--text"
               id="formInput#search"
               type="text"
-              name="text"
+              name="search"
+              value="{{ request.GET.search }}"
               placeholder="Search by Project Title"
             />
           </div>
@@ -64,12 +65,12 @@
     </div>
   </section>
 
-  <div class="pagination">
+  {% comment %} <div class="pagination">
     <ul class="container">
       <li><a href="#" class="btn btn--disabled">&#10094; Prev</a></li>
       <li><a href="#" class="btn btn--sub">01</a></li>
       <li><a href="#" class="btn">Next &#10095;</a></li>
     </ul>
-  </div>
+  </div> {% endcomment %}
 </main>
 {% endblock projects%}

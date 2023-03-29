@@ -12,7 +12,9 @@
             </span>
           {%endfor%} 
           </div>
-          <a class="singleProject__liveLink" href="#" target="_blank"><i class="im im-external-link"></i>Source Code
+          {% if project.source_link %}
+          <a class="singleProject__liveLink" href="{{project.source_link}}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square fa-lg"></i>Source Code
+          {% endif %}
           </a>
         </div>
         <div class="column column--2of3">

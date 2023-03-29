@@ -5,25 +5,29 @@
 <main class="inbox my-xl">
   <div class="content-box">
     <h3 class="inbox__title">New Messages(<span>{{unread_count}}</span>)</h3>
+    {% if total_message_requests != 0 %}
     <ul class="messages">
       {% for message in message_requests %} 
       {% if message.is_read == False %}
       <li class="message message--unread">
-      {% else %}
-      <li class="message">
-      {% endif %}
-        <a href="{% url 'message-detail' message.id %}">
-          {% if message.name == None %}
-          <span class="message__author">{{message.name}}</span>
-          {% else %}
-          <span class="message__author">{{message.name}}</span>
+        {% else %}
+        <li class="message">
           {% endif %}
-          <span class="message__subject">{{message.subject}}</span>
-          <span class="message__date">{{message.created_at}}</span>
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
+          <a href="{% url 'message-detail' message.id %}">
+            {% if message.name == None %}
+            <span class="message__author">{{message.name}}</span>
+            {% else %}
+            <span class="message__author">{{message.name}}</span>
+            {% endif %}
+            <span class="message__subject">{{message.subject}}</span>
+            <span class="message__date">{{message.created_at}}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="inbox__empty">Your Inbox is Empty ;)</p>
+      {% endif %}
   </div>
 </main>
 {% endblock projects %}

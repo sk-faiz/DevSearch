@@ -9,30 +9,35 @@
         <div class="column column--1of3">
           <div class="card text-center">
             <div class="card__body dev">
-              <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}"><i class="im im-edit"></i> Edit</a>
+              <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-account' %}"><i class="fa-solid fa-pen-to-square fa-lg"></i> Edit</a>
               <img class="avatar avatar--xl dev__avatar" src="{{profile.profile_pic.url}}" />
               <h2 class=" dev__name">{{profile.name}}</h2>
               <p class="dev__title">{{profile.short_intro}}</p>
               {% if profile.location is not None %}
               <p class="dev__location">Based in {{profile.location}}</p>
               {% endif %}
-              {% comment %} <ul class="dev__social">
-                <li>
-                  <a title="Github" href="#" target="_blank"><i class="im im-github"></i></a>
-                </li>
-                <li>
-                  <a title="Stackoverflow" href="#" target="_blank"><i class="im im-stackoverflow"></i></a>
-                </li>
-                <li>
-                  <a title="Twitter" href="#" target="_blank"><i class="im im-twitter"></i></a>
-                </li>
-                <li>
-                  <a title="LinkedIn" href="#" target="_blank"><i class="im im-linkedin"></i></a>
-                </li>
-                <li>
-                  <a title="Personal Website" href="#" target="_blank"><i class="im im-globe"></i></a>
-                </li>
-              </ul> {% endcomment %}
+              <ul class="dev__social">
+                {% if profile.social_github %}
+              <li>
+                <a title="Github" href="{{profile.social_github}}" target="_blank"><i class="fa-brands fa-github fa-xl"></i></a>
+              </li>
+              {% endif %}
+              {% if profile.social_linkedin %}
+              <li>
+                <a title="LinkedIn" href="{{profile.social_linkedin}}" target="_blank"><i class="fa-brands fa-linkedin fa-xl"></i></a>
+              </li>
+              {% endif %}
+              {% if profile.social_instagram %}
+              <li>
+                <a title="Twitter" href="{{profile.social_instagram}}" target="_blank"><i class="fa-brands fa-instagram fa-xl"></i></a>
+              </li>
+              {% endif %}
+              {% if profile.social_twitter %}
+              <li>
+                <a title="Personal Website" href="{{profile.social_twitter}}" target="_blank"><i class="fa-regular fa-globe fa-xl"></i></a>
+              </li>
+              {% endif %}
+              </ul> 
               {% if request.user.profile.id != profile.id %}
               <a style="margin-top:10px" href="{% url 'create-message' profile.id %}" class="btn btn--sub btn--lg">Send Message </a>
               {% endif %}
@@ -48,7 +53,7 @@
           </div>
           <div class="settings">
             <h3 class="settings__title">Skills</h3>
-            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'add-skill'%}"><i class="im im-plus"></i> Add Skill</a>
+            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'add-skill'%}"> Add Skill</a>
           </div>
 
           <table class="settings__table">
@@ -63,8 +68,8 @@
                 </p>
               </td>
               <td class="settings__tableActions">
-                <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-skill' skill.id %}"><i class="im im-edit"></i> Edit</a>
-                <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-skill' skill.id %}?next=/account"><i class="im im-x-mark-circle-o"></i>
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'edit-skill' skill.id %}"><i class="fa-solid fa-pen-to-square fa-lg"></i> Edit</a>
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'delete-skill' skill.id %}?next=/account"><i class="fa-solid fa-trash fa-lg"></i>
                   Delete</a>
               </td>
             </tr>
@@ -73,7 +78,7 @@
 
           <div class="settings">
             <h3 class="settings__title">Projects</h3>
-            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'createPost' %}"><i class="im im-plus"></i> Add Project</a>
+            <a class="tag tag--pill tag--sub settings__btn tag--lg" href="{% url 'createPost' %}"> Add Project</a>
           </div>
 
           <table class="settings__table">
@@ -91,8 +96,8 @@
                 </p>
               </td>
               <td class="settings__tableActions">
-                <a class="tag tag--pill tag--main settings__btn" href="{% url 'updatePost' project.id %}"><i class="im im-edit"></i> Edit</a>
-                <a class="tag tag--pill tag--main settings__btn" href="{% url 'deletePost' project.id %}?next=/account"><i class="im im-x-mark-circle-o"></i>
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'updatePost' project.id %}"><i class="fa-solid fa-pen-to-square fa-lg"></i> Edit</a>
+                <a class="tag tag--pill tag--main settings__btn" href="{% url 'deletePost' project.id %}?next=/account"><i class="fa-solid fa-trash fa-lg"></i>
                   Delete</a>
                 </td>
               </tr>

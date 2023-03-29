@@ -5,7 +5,7 @@
 <main class="messagePage my-xl">
   <div class="content-box">
     <div class="message">
-      <a class="backButton" href="{% url 'inbox' %}"><i class="im im-angle-left"></i></a>
+      <a class="backButton" href="{% url 'inbox' %}"><i class="fa-solid fa-arrow-left fa-lg"></i></a>
       <h2 class="message__subject">{{message_request.subject}}</h4>
         <a href="profile.html" class="message__author">{{message_request.sender.name}}</a>
         <p class="message__date">{{message_request.created_at}}</p>

@@ -125,3 +125,41 @@ def delete_skill(request, pk):
     context = {'object': skill, 'label': skill.name}
     return render(request, 'social/delete_form.html', context)
              
+@login_required(login_url='login')
+def inbox(request):
+    profile = request.user.profile
+    message_requests = profile.messages.all()
+    unread_count = message_requests.filter(is_read=False).count()
+    context = {'message_requests': message_requests, 'unread_count': unread_count}
+    return render(request, 'user/inbox.html', context)
+
+def viewMessage(request, pk):
+    profile = request.user.profile
+    message_request = profile.messages.get(id=pk)
+    if message_request.is_read == False:
+        message_request.is_read = True
+        message_request.save()
+    context = {'message_request': message_request}
+    return render(request, 'user/message.html', context)
+
+def createMessage(request, pk):
+    recipient = Profile.objects.get(id=pk)
+    form = MessageForm()
+    try:
+        sender = request.user.profile
+    except:
+        sender = None
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = sender
+            message.recipient = recipient
+            if sender:
+                message.name = sender.name
+                message.email = sender.email
+            message.save()
+            messages.success(request, 'Message sent successfully')
+            return redirect('profile-detail', pk=recipient.id)
+    context = {'recipient': recipient, 'form': form}
+    return render(request, 'user/message_form.html', context)
